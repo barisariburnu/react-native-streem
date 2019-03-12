@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Text, StyleSheet, ImageBackground, Dimensions, Image } from 'react-native';
 import Button from '../commons/Button';
+import { strings } from '../lang/Strings';
 
 const { width, height } = Dimensions.get('window');
 
@@ -34,16 +35,16 @@ class Form extends Component {
 
                 <Image source={require('../img/logo.png')} />
 
-                { this.renderSection('konumunuz') }
+                { this.renderSection(strings.yourLocation) }
 
-                { this.renderSection('onun konumu') }
+                { this.renderSection(strings.itsLocation) }
 
                 <View style={styles.pickerMainViewStyle}>
-                    { this.renderPickerButton('senin fotoğrafın') }
-                    { this.renderPickerButton('onun fotoğrafı') }
+                    { this.renderPickerButton(strings.yourPhoto) }
+                    { this.renderPickerButton(strings.itsPhoto) }
                 </View>
 
-                <Button text='Yol Haritası Oluştur' />
+                <Button text={strings.createRoadMap} />
 
             </ImageBackground>
         );
