@@ -9,6 +9,7 @@
   "dependencies": {
     "react": "16.6.3",
     "react-native": "0.58.5",
+    "react-native-google-places": "^2.5.2",
     "react-native-localization": "^2.1.0",
     "react-native-router-flux": "^4.0.6"
   },
