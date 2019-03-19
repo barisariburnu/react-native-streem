@@ -3,6 +3,7 @@ import {
     View, Text, StyleSheet, ImageBackground, Dimensions, Image, TouchableOpacity 
 } from 'react-native';
 import RNGoolePlaces from 'react-native-google-places';
+import ImagePicker from 'react-native-image-picker';
 import Button from '../commons/Button';
 import { strings } from '../lang/Strings';
 
@@ -16,7 +17,9 @@ class Form extends Component {
         yourLngLat: [],
         itsLngLat: [],
         yourImgOk: require('../img/ok.png'),
-        itsImgOk: require('../img/ok.png')
+        itsImgOk: require('../img/ok.png'),
+        yourPhoto: '',
+        itsPhoto: ''
     }
 
     componentWillMount() {
@@ -37,14 +40,14 @@ class Form extends Component {
         );
     }
 
-    renderPickerButton(text) {
+    renderPickerButton(text, onPress) {
         return (
-            <View>
+            <TouchableOpacity onPress={() => onPress}>
                 <View style={styles.pickerButtonStyle}>
                     <Image source={require('../img/add.png')} />
                 </View>
                 <Text style={styles.pickerTextStyle}>{text}</Text>
-            </View>
+            </TouchableOpacity>
         );
     }
 
@@ -68,6 +71,54 @@ class Form extends Component {
         .catch(error => console.log(error.message));
     }
 
+    openImagePicker(type) {
+        const options = {
+            title: strings.imagePickerTitle,
+            storageOptions: {
+                skipBackup: true,
+                path: 'images'
+            },
+            takePhotoButtonTitle: strings.takePhotoButtonTitle,
+            chooseFromLibraryButtonTitle: strings.chooseFromLibraryButtonTitle,
+            cancelButtonTitle: strings.cancelButtonTitle,
+            maxWidth: 500,
+            maxHeight: 500,
+            quality: 0.5
+        };
+
+        ImagePicker.showImagePicker(options, (response) => {
+            if (response.didCancel) {
+                console.log('User cancelled image picker');
+            } else if (response.error) {
+                console.log('ImagePicker Error: ', response.error);
+            } else {
+                const source = { uri: response.uri };
+
+                if (type === 'your') {
+                    this.setState({
+                        yourPhoto: source
+                    });
+                } else {
+                    this.setState({
+                        itsPhoto: source
+                    });
+                }
+            }
+        });
+    }
+
+    showPhoto(type, text, onPress) {
+        return (
+            <TouchableOpacity onPress={() => onPress}>
+                <Image 
+                    source={type === 'your' ? this.state.yourPhoto : this.state.itsPhoto} 
+                    styl={styles.photoStyle}
+                />
+                <Text style={styles.pickerTextStyle}>{text}</Text>
+            </TouchableOpacity>
+        );
+    }
+
     render() {
         return (
             <ImageBackground source={require('../img/bg.png')} style={styles.imageBackgroundStyle}>
@@ -87,8 +138,30 @@ class Form extends Component {
                 )}
 
                 <View style={styles.pickerMainViewStyle}>
-                    { this.renderPickerButton(strings.yourPhoto) }
-                    { this.renderPickerButton(strings.itsPhoto) }
+                    { 
+                        this.state.yourPhoto !== '' ? 
+                        this.showPhoto(
+                            'your',
+                            strings.yourPhoto, 
+                            () => this.openImagePicker('your')
+                        ) :
+                        this.renderPickerButton(
+                            strings.yourPhoto, 
+                            () => this.openImagePicker('your')
+                        )
+                    }
+                    { 
+                        this.state.itsPhoto !== '' ? 
+                        this.showPhoto(
+                            'its',
+                            strings.itsPhoto, 
+                            () => this.openImagePicker('its')
+                        ) :
+                        this.renderPickerButton(
+                            strings.itsPhoto, 
+                            () => this.openImagePicker('its')
+                        )
+                    }
                 </View>
 
                 <Button text={strings.createRoadMap} />
@@ -119,6 +192,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'space-between',
         flexDirection: 'row',
+        alignItems: 'center'
     },
     textStyle: {
         flex: 19
@@ -155,6 +229,11 @@ const styles = StyleSheet.create({
     },
     buttonTextStyle: {
         color: 'white'
+    },
+    photoStyle: {
+        width: width * 0.24,
+        height: width * 0.24,
+        borderRadius: (width * 0.24) / 2
     }
 });
 
