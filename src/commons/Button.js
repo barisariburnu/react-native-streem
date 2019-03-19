@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, Dimensions } from 'react-native';
+import { Text, StyleSheet, Dimensions, TouchableOpacity } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
 class Button extends Component {
     render() {
         return (
-            <View style={styles.buttonViewStyle}>
+            <TouchableOpacity 
+                style={styles.buttonViewStyle} 
+                onPress={() => this.props.onPress()}
+            >
                 <Text style={styles.buttonTextStyle}>{this.props.text}</Text>
-            </View>
+            </TouchableOpacity>
         );
     }
 }

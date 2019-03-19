@@ -13,6 +13,7 @@
     "react-native-google-places": "^2.5.2",
     "react-native-image-picker": "^0.28.0",
     "react-native-localization": "^2.1.0",
+    "react-native-maps": "^0.23.0",
     "react-native-router-flux": "^4.0.6"
   },
   "devDependencies": {

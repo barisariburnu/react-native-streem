@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { 
     View, Text, StyleSheet, ImageBackground, Dimensions, Image, TouchableOpacity 
 } from 'react-native';
+import { Actions } from 'react-native-router-flux';
 import RNGoolePlaces from 'react-native-google-places';
 import ImagePicker from 'react-native-image-picker';
 import Button from '../commons/Button';
@@ -164,7 +165,17 @@ class Form extends Component {
                     }
                 </View>
 
-                <Button text={strings.createRoadMap} />
+                <Button 
+                    text={strings.createRoadMap} 
+                    onPress={() => Actions.Map({
+                        data: {
+                            yourLngLat: this.state.yourLngLat,
+                            itsLngLat: this.state.itsLngLat,
+                            yourPhoto: this.state.yourPhoto,
+                            itsPhoto: this.state.itsPhoto
+                        }
+                    })}
+                />
 
             </ImageBackground>
         );
